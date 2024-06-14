@@ -1,0 +1,24 @@
+<suitelet scriptid="customscript_fb_autoinv_from_stgng_tk_sl">
+  <description>Trace Script for Autoinoicing.</description>
+  <isinactive>F</isinactive>
+  <name>TKIO - Autoinvoicing from staging tk- SL</name>
+  <notifyadmins>F</notifyadmins>
+  <notifyemails></notifyemails>
+  <notifyowner>T</notifyowner>
+  <notifyuser>F</notifyuser>
+  <scriptfile>[/SuiteScripts/Tekiio/Autoinvoicing from staging record/TKIO - Autoinvoicing from staging record tracking- SL.js]</scriptfile>
+  <scriptdeployments>
+    <scriptdeployment scriptid="customdeploy_fb_autoinv_from_stgng_tk_sl">
+      <allemployees>T</allemployees>
+      <allroles>T</allroles>
+      <audslctrole></audslctrole>
+      <eventtype></eventtype>
+      <isdeployed>T</isdeployed>
+      <isonline>F</isonline>
+      <loglevel>DEBUG</loglevel>
+      <runasrole>ADMINISTRATOR</runasrole>
+      <status>RELEASED</status>
+      <title>TKIO - Autoinvoicing from staging tk- SL</title>
+    </scriptdeployment>
+  </scriptdeployments>
+</suitelet>

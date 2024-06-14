@@ -1,0 +1,21 @@
+<manifest projecttype="ACCOUNTCUSTOMIZATION">
+  <projectname>Autoinvoicing</projectname>
+  <frameworkversion>1.0</frameworkversion>
+  <dependencies>
+    <features>
+      <feature required="true">UNITSOFMEASURE</feature>
+      <feature required="false">MULTILANGUAGE</feature>
+      <feature required="true">LOCATIONS</feature>
+      <feature required="true">SERVERSIDESCRIPTING</feature>
+      <feature required="false">CUSTOMSEGMENTS</feature>
+      <feature required="false">EXTREMELIST</feature>
+      <feature required="true">CUSTOMRECORDS</feature>
+      <feature required="false">CREATESUITEBUNDLES</feature>
+    </features>
+    <objects>
+      <object>customlist_weinfuse_usage_status.val_2782152_7076975_sb1_635</object>
+      <object>customlist_weinfuse_usage_status</object>
+      <object>customlist_tkio_item_status_list</object>
+    </objects>
+  </dependencies>
+</manifest>
