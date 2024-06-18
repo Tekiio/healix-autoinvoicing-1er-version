@@ -15,10 +15,10 @@
 * Script in NS    -> Registro en Netsuite <ID del registro>
 */
 define(['N/ui/serverWidget', 'N/search', 'N/http', 'N/file', 'N/record', 'N/runtime', 'N/xml', 'N/render',
-    'N/redirect', 'N/encode', 'N/https', 'N/format', 'N/task', 'N/url', 'SuiteScripts/Staging Record/Libs/view_lib.js'], (serverWidget, search, http, file, record, runtime, xml, render, redirect, encode, https, format, task, url, viewLib) => {
+    'N/redirect', 'N/encode', 'N/https', 'N/format', 'N/task', 'N/url', 'SuiteScripts/Staging Record/Libs/view_lib.js','/SuiteScripts/Libraries/tabs','./Const_tabs.js'], 
+    (serverWidget, search, http, file, record, runtime, xml, render, redirect, encode, https, format, task, url, viewLib,tabs,constTabs) => {
 
         var PAGE_SIZE = 1000;
-
         const { UI } = viewLib
         const SCRIPT_MAPREDUCE = {};
         SCRIPT_MAPREDUCE.SCRIPTID = 'customscript_fb_autoinv_from_stgng_mr';
@@ -165,74 +165,75 @@ define(['N/ui/serverWidget', 'N/search', 'N/http', 'N/file', 'N/record', 'N/runt
                 log.audit({ title: 'Parametros:', details: { pageId: pageId, stDate: stDate, ed_Date: ed_Date, customer: customer, checkall: checkall, unCheckall: unCheckall, idsStaging: idsStaging } });
 
                 // Add the hotbar to redirect more actions ( Modules)
-                form.addField({ id: 'custpage_tabs_view', label: ' ', type: serverWidget.FieldType.INLINEHTML, source: '', container: '' }).defaultValue = `
-                    <style> 
-                        div#body div#div__body {
-                        margin-top: 65px !important;
-                        }
-                        .uir-page-title {
-                        display: none !important;
-                        }
-                        .container_custom {
-                        padding: 1rem;
-                        min-width: 100vh;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        }
-                        .container_custom > input {
-                        font-size: 22px;
-                        font-weight: bold;
-                        color: #4d5f79;
-                        line-height: 33px;
-                        }
-                        .tabs {
-                        border-bottom: 0.5px solid #dbdbdb;
-                        width: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-around;
-                    }
-                    .tabs input {
-                        padding: 1em;
-                        font-size: 11pt;
-                        font-weight: bold;
-                        border-radius: 0.375em 0.375em 0 0;
-                        border: 1px solid transparent;
-                        min-width: 20vw;
-                        height: 45px;
-                        cursor: pointer;
-                        background-color: #f0f0f0;
-                        color: #7c7c7c;
-                    }
-                    .tabs input.is-active {
-                        background-color: #3e8ed0;
-                        border-color: #dbdbdb;
-                        border-bottom-color: transparent !important;
-                        color: #fff;
-                    }
-                    .tabs input:hover {
-                        background-color: #eff5fb;
-                        color: #3e8ed0;
-                        border-bottom-color: #dbdbdb;
-                    }
-                    </style>
-                    <div class="container_custom">
-                        <div class="tabs">
-                        <input  type="button" value="WeInfuse Usage" id="custpage_cust_action" name="custpage_cust_action" onclick="var  rConfig =  JSON.parse( '{}' ) ; rConfig['context'] = '/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'; var entryPointRequire = require.config(rConfig); entryPointRequire(['/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'], function(mod){ try{    if (!!window)    {        var origScriptIdForLogging = window.NLScriptIdForLogging;        var origDeploymentIdForLogging = window.NLDeploymentIdForLogging;        window.NLScriptIdForLogging = 'customscript_tkio_reconcile_ascend_sl';        window.NLDeploymentIdForLogging = 'customdeploy_view_main';    }mod.goToList();}finally{    if (!!window)    {        window.NLScriptIdForLogging = origScriptIdForLogging;        window.NLDeploymentIdForLogging = origDeploymentIdForLogging;    }} }); return false;">
+                // form.addField({ id: 'custpage_tabs_view', label: ' ', type: serverWidget.FieldType.INLINEHTML, source: '', container: '' }).defaultValue = `
+                //     <style> 
+                //         div#body div#div__body {
+                //         margin-top: 65px !important;
+                //         }
+                //         .uir-page-title {
+                //         display: none !important;
+                //         }
+                //         .container_custom {
+                //         padding: 1rem;
+                //         min-width: 100vh;
+                //         display: flex;
+                //         justify-content: center;
+                //         align-items: center;
+                //         position: absolute;
+                //         top: 0;
+                //         left: 0;
+                //         right: 0;
+                //         }
+                //         .container_custom > input {
+                //         font-size: 22px;
+                //         font-weight: bold;
+                //         color: #4d5f79;
+                //         line-height: 33px;
+                //         }
+                //         .tabs {
+                //         border-bottom: 0.5px solid #dbdbdb;
+                //         width: 50%;
+                //         display: flex;
+                //         align-items: center;
+                //         justify-content: space-around;
+                //     }
+                //     .tabs input {
+                //         padding: 1em;
+                //         font-size: 11pt;
+                //         font-weight: bold;
+                //         border-radius: 0.375em 0.375em 0 0;
+                //         border: 1px solid transparent;
+                //         min-width: 20vw;
+                //         height: 45px;
+                //         cursor: pointer;
+                //         background-color: #f0f0f0;
+                //         color: #7c7c7c;
+                //     }
+                //     .tabs input.is-active {
+                //         background-color: #3e8ed0;
+                //         border-color: #dbdbdb;
+                //         border-bottom-color: transparent !important;
+                //         color: #fff;
+                //     }
+                //     .tabs input:hover {
+                //         background-color: #eff5fb;
+                //         color: #3e8ed0;
+                //         border-bottom-color: #dbdbdb;
+                //     }
+                //     </style>
+                //     <div class="container_custom">
+                //         <div class="tabs">
+                //         <input  type="button" value="WeInfuse Usage" id="custpage_cust_action" name="custpage_cust_action" onclick="var  rConfig =  JSON.parse( '{}' ) ; rConfig['context'] = '/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'; var entryPointRequire = require.config(rConfig); entryPointRequire(['/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'], function(mod){ try{    if (!!window)    {        var origScriptIdForLogging = window.NLScriptIdForLogging;        var origDeploymentIdForLogging = window.NLDeploymentIdForLogging;        window.NLScriptIdForLogging = 'customscript_tkio_reconcile_ascend_sl';        window.NLDeploymentIdForLogging = 'customdeploy_view_main';    }mod.goToList();}finally{    if (!!window)    {        window.NLScriptIdForLogging = origScriptIdForLogging;        window.NLDeploymentIdForLogging = origDeploymentIdForLogging;    }} }); return false;">
 
-                        <input type="button" value="Ascend Reconcilation" id="custpage_cust_action" name="custpage_cust_action" onclick="var  rConfig =  JSON.parse( '{}' ) ; rConfig['context'] = '/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'; var entryPointRequire = require.config(rConfig); entryPointRequire(['/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'], function(mod){ try{    if (!!window)    {        var origScriptIdForLogging = window.NLScriptIdForLogging;        var origDeploymentIdForLogging = window.NLDeploymentIdForLogging;        window.NLScriptIdForLogging = 'customscript_tkio_reconcile_ascend_sl';        window.NLDeploymentIdForLogging = 'customdeploy_view_main';    }mod.toReconcilie();}finally{    if (!!window)    {        window.NLScriptIdForLogging = origScriptIdForLogging;        window.NLDeploymentIdForLogging = origDeploymentIdForLogging;    }} }); return false;">
+                //         <input type="button" value="Ascend Reconcilation" id="custpage_cust_action" name="custpage_cust_action" onclick="var  rConfig =  JSON.parse( '{}' ) ; rConfig['context'] = '/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'; var entryPointRequire = require.config(rConfig); entryPointRequire(['/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'], function(mod){ try{    if (!!window)    {        var origScriptIdForLogging = window.NLScriptIdForLogging;        var origDeploymentIdForLogging = window.NLDeploymentIdForLogging;        window.NLScriptIdForLogging = 'customscript_tkio_reconcile_ascend_sl';        window.NLDeploymentIdForLogging = 'customdeploy_view_main';    }mod.toReconcilie();}finally{    if (!!window)    {        window.NLScriptIdForLogging = origScriptIdForLogging;        window.NLDeploymentIdForLogging = origDeploymentIdForLogging;    }} }); return false;">
 
-                        <input type="button" value="Services Import" id="custpage_cust_action" name="custpage_cust_action" onclick="var  rConfig =  JSON.parse( '{}' ) ; rConfig['context'] = '/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'; var entryPointRequire = require.config(rConfig); entryPointRequire(['/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'], function(mod){ try{    if (!!window)    {        var origScriptIdForLogging = window.NLScriptIdForLogging;        var origDeploymentIdForLogging = window.NLDeploymentIdForLogging;        window.NLScriptIdForLogging = 'customscript_tkio_reconcile_ascend_sl';        window.NLDeploymentIdForLogging = 'customdeploy_view_main';    }mod.toServices();}finally{    if (!!window)    {        window.NLScriptIdForLogging = origScriptIdForLogging;        window.NLDeploymentIdForLogging = origDeploymentIdForLogging;    }} }); return false;">
+                //         <input type="button" value="Services Import" id="custpage_cust_action" name="custpage_cust_action" onclick="var  rConfig =  JSON.parse( '{}' ) ; rConfig['context'] = '/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'; var entryPointRequire = require.config(rConfig); entryPointRequire(['/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'], function(mod){ try{    if (!!window)    {        var origScriptIdForLogging = window.NLScriptIdForLogging;        var origDeploymentIdForLogging = window.NLDeploymentIdForLogging;        window.NLScriptIdForLogging = 'customscript_tkio_reconcile_ascend_sl';        window.NLDeploymentIdForLogging = 'customdeploy_view_main';    }mod.toServices();}finally{    if (!!window)    {        window.NLScriptIdForLogging = origScriptIdForLogging;        window.NLDeploymentIdForLogging = origDeploymentIdForLogging;    }} }); return false;">
 
-                        <input class="is-active" type="button" value="Auto-invoicing" id="custpage_cust_action" name="custpage_cust_action" onclick="var  rConfig =  JSON.parse( '{}' ) ; rConfig['context'] = '/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'; var entryPointRequire = require.config(rConfig); entryPointRequire(['/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'], function(mod){ try{    if (!!window)    {        var origScriptIdForLogging = window.NLScriptIdForLogging;        var origDeploymentIdForLogging = window.NLDeploymentIdForLogging;        window.NLScriptIdForLogging = 'customscript_tkio_reconcile_ascend_sl';        window.NLDeploymentIdForLogging = 'customdeploy_view_main';    }mod.toInvoicing();}finally{    if (!!window)    {        window.NLScriptIdForLogging = origScriptIdForLogging;        window.NLDeploymentIdForLogging = origDeploymentIdForLogging;    }} }); return false;">
-                        </div>
-                    </div>`
-
+                //         <input class="is-active" type="button" value="Auto-invoicing" id="custpage_cust_action" name="custpage_cust_action" onclick="var  rConfig =  JSON.parse( '{}' ) ; rConfig['context'] = '/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'; var entryPointRequire = require.config(rConfig); entryPointRequire(['/SuiteScripts/Staging Record/TKIO - UPLOAD ASCEND CS'], function(mod){ try{    if (!!window)    {        var origScriptIdForLogging = window.NLScriptIdForLogging;        var origDeploymentIdForLogging = window.NLDeploymentIdForLogging;        window.NLScriptIdForLogging = 'customscript_tkio_reconcile_ascend_sl';        window.NLDeploymentIdForLogging = 'customdeploy_view_main';    }mod.toInvoicing();}finally{    if (!!window)    {        window.NLScriptIdForLogging = origScriptIdForLogging;        window.NLDeploymentIdForLogging = origDeploymentIdForLogging;    }} }); return false;">
+                //         </div>
+                //     </div>`
+                const tabs = form.addField({ id: 'custpage_tabs_view', label: ' ', type: serverWidget.FieldType.INLINEHTML })
+                tabs.defaultValue = createTabsUI()
                 if ((context.request.parameters.hasOwnProperty('statusPage') && context.request.parameters.statusPage)) {
 
                     var taskID = context.request.parameters.mapReduceTask;
@@ -383,6 +384,30 @@ define(['N/ui/serverWidget', 'N/search', 'N/http', 'N/file', 'N/record', 'N/runt
                 log.error({ title: 'Error createPanel:', details: e });
             }
         }
+        const createTabsUI = () => {
+            try {
+              const { TABS } = tabs
+              const { STYLE, BODY, CONTENT_BASE } = TABS
+              log.debug('TABS', constTabs)
+              let CONTENT = constTabs.UI.TABS.CONTENT
+              const objScript = runtime.getCurrentScript()
+              const { deploymentId, id } = objScript
+              log.debug('objScript', { deploymentId, id })
+              let newContent = ''
+              Object.values(CONTENT).forEach(tab => {
+                let input = CONTENT_BASE
+                if (tab.scriptId === id && tab.deployId === deploymentId) {
+                  tab.class = 'is-active'
+                }
+                Object.entries(tab).forEach(([key, value]) => (input = input.replaceAll(`$${key}`, value)))
+                newContent += input
+              })
+              const newBody = BODY.replace('<!--REPLACE-->', newContent)
+              return STYLE + newBody ?? ''
+            } catch (error) {
+              log.error('Error on createTabsUI', error)
+            }
+          }
         /**
          * The function consults the status of a task and returns information about its stage, pending output
          * count, percentage completed, and pending map and reduce counts.
@@ -461,6 +486,8 @@ define(['N/ui/serverWidget', 'N/search', 'N/http', 'N/file', 'N/record', 'N/runt
                     ["custrecord_staging_transaction_created", search.Operator.ANYOF, "@NONE@"],
                     'AND',
                     ["custrecord_staging_item.subtype", search.Operator.NONEOF, "Purchase"],
+                    'AND',
+                    ["custrecord_staging_item.type", search.Operator.ANYOF, "Service"],
                     'AND',
                     [["custrecord_staging_price", search.Operator.GREATERTHAN, 0], 'AND', ["custrecord_staging_price", search.Operator.ISNOTEMPTY, '']]
                 ];

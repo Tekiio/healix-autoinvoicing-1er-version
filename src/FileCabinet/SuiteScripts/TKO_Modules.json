@@ -1,0 +1,8 @@
+{
+  "paths": {
+    "TKO/notifications": "/SuiteScripts/Libraries/custom messages",
+    "TKO/moment": "/SuiteScripts/Libraries/moment",
+    "TKO/tabs": "/SuiteScripts/Libraries/tabs",
+    "TKO/controller": "/SuiteScripts/Libraries/controller"
+  }
+}
